@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TaylorModel", "TaylorModel\TaylorModel.vcxproj", "{5AB8EC81-DE8A-4018-B5A9-D985ECEE19B5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "intervalClassTest", "intervalClassTest\intervalClassTest.vcxproj", "{DCA69A6F-2901-4184-94E7-071474277A8D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5AB8EC81-DE8A-4018-B5A9-D985ECEE19B5} = {5AB8EC81-DE8A-4018-B5A9-D985ECEE19B5}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5AB8EC81-DE8A-4018-B5A9-D985ECEE19B5}.Debug|x64.ActiveCfg = Debug|x64
+		{5AB8EC81-DE8A-4018-B5A9-D985ECEE19B5}.Debug|x64.Build.0 = Debug|x64
+		{5AB8EC81-DE8A-4018-B5A9-D985ECEE19B5}.Debug|x86.ActiveCfg = Debug|Win32
+		{5AB8EC81-DE8A-4018-B5A9-D985ECEE19B5}.Debug|x86.Build.0 = Debug|Win32
+		{5AB8EC81-DE8A-4018-B5A9-D985ECEE19B5}.Release|x64.ActiveCfg = Release|x64
+		{5AB8EC81-DE8A-4018-B5A9-D985ECEE19B5}.Release|x64.Build.0 = Release|x64
+		{5AB8EC81-DE8A-4018-B5A9-D985ECEE19B5}.Release|x86.ActiveCfg = Release|Win32
+		{5AB8EC81-DE8A-4018-B5A9-D985ECEE19B5}.Release|x86.Build.0 = Release|Win32
+		{DCA69A6F-2901-4184-94E7-071474277A8D}.Debug|x64.ActiveCfg = Debug|x64
+		{DCA69A6F-2901-4184-94E7-071474277A8D}.Debug|x64.Build.0 = Debug|x64
+		{DCA69A6F-2901-4184-94E7-071474277A8D}.Debug|x86.ActiveCfg = Debug|Win32
+		{DCA69A6F-2901-4184-94E7-071474277A8D}.Debug|x86.Build.0 = Debug|Win32
+		{DCA69A6F-2901-4184-94E7-071474277A8D}.Release|x64.ActiveCfg = Release|x64
+		{DCA69A6F-2901-4184-94E7-071474277A8D}.Release|x64.Build.0 = Release|x64
+		{DCA69A6F-2901-4184-94E7-071474277A8D}.Release|x86.ActiveCfg = Release|Win32
+		{DCA69A6F-2901-4184-94E7-071474277A8D}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
