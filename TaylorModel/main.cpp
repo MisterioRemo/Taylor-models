@@ -19,10 +19,8 @@ int main() {
 
 	equation<double> odu(2, 0, 18);
 	odu.initialFlow(&initPoint);
-	vector<powerSeries<double> > u;
 
 	odu.RungeKutta(0, 6, 0.01);
 
-	//_CrtDumpMemoryLeaks();
 	return 0;
 }
