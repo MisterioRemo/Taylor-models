@@ -76,7 +76,7 @@ odu.initialFlow(&initPoint);
 ```
 
 Затем определяем функции.<br>
-*Обратите внимание, что к переменным мы обращаемся через агрумент функции v[i], а вот к параметру системы через u[j]. Как определить j? У него тот же индекс, что и в векторе initPoint.*
+*Обратите внимание, что к переменным мы обращаемся через аргумент функции v[i], а вот к параметру системы через u[j]. Как определить j? У него тот же индекс, что и в векторе initPoint.*
 ```cpp
 template <typename T>
 powerSeries<T> equation<T>::pFun1(vector<powerSeries<T> > &v) {
@@ -96,4 +96,80 @@ odu.RungeKutta(0, 100, 0.01, true, 30);
 
 ![function2](https://github.com/MisterioRemo/misterioremo.github.io/blob/master/taylor-model-img/fun2.gif?raw=true)
 
-*На графике отражена проекция множества решений из трехмерного пространства в двухмерное.*
+*На графике отражена проекция множества решений из трёхмерного пространства в двухмерное.*
+
+
+#### Пример № 3
+Немного о тригонометрии. Она пока не реализована, придётся раскладывать функции в ряд самостоятельно.
+
+![\begin{array}{l} \\ x' = y\\ y' = -sin(x) \\ x(0) \in [-1.0; 1.0] \\ y(0) \in [0; 1.0] \\ t \in [0; 15] \end{array}](https://latex.codecogs.com/gif.latex?%5Cbegin%7Barray%7D%7Bl%7D%20%5C%5C%20x%27%20%3D%20y%20%5C%5C%20y%27%20%3D%20-sin%28x%29%20%5C%5C%20x%280%29%20%5Cin%20%5B-1.0%3B%201.0%5D%20%5C%5C%20y%280%29%20%5Cin%20%5B0%3B%201.0%5D%20%5C%5C%20t%20%5Cin%20%5B0%3B%2015%5D%20%5Cend%7Barray%7D)
+
+Определяем функции.
+```cpp
+template <typename T>
+powerSeries<T> equation<T>::pFun1(vector<powerSeries<T> > &v) {
+	return v[1];
+}
+
+template <typename T>
+powerSeries<T> equation<T>::pFun2(vector<powerSeries<T> > &v) {
+	powerSeries<T> p3 = v[0] * v[0] * v[0];
+	powerSeries<T> p5 = p3 *v[0] * v[0];
+	powerSeries<T> p7 = p5*v[0] * v[0];
+	powerSeries<T> p9 = p7*v[0] * v[0];
+	return (v[0] - p3 / 6 + p5 / 120 + p7 / 5040)*(-1);
+}
+```
+
+И производим расчёт.
+```cpp
+vector<interval<double> > initPoint;
+initPoint.push_back(interval<double>(-1.0, 1.0));
+initPoint.push_back(interval<double>(0, 1.0));
+
+equation<double> odu(2, 0, 8);
+odu.initialFlow(&initPoint);
+
+odu.RungeKutta(0, 15, 0.01, true, 30);
+```
+
+![function2](https://github.com/MisterioRemo/misterioremo.github.io/blob/master/taylor-model-img/fun3.gif?raw=true)
+---
+
+### Базовые функции
+
+#### Методы класса *equation*
+
+**equation(int nvar, int param, int order)** – инициализация класса.<br/>
+*nvar* – количество переменных системы;<br/>
+*param* – количество параметров системы;<br/>
+*order* – порядок ряда, в котором будут проводиться все последующие вычисления.
+
+**void initialFlow(vector<interval<T> > \*points)** – инициализация начальных условий системы. В points должны находиться начальные интервалы переменных, затем параметров.
+
+**void RungeKutta(double tStart, double tEnd, double h, bool plot = false, int plotStep = 0, std::string filename = "function.dat")** – расчёт системы методом Рунге-Кутты 4-го порядка.<br/>
+*tStart* – начальное время расчёта системы;<br/>
+*tEnd* – конечное время расчёта системы;<br/>
+*h* – шаг по времени;<br/>
+*plot* – указывается true, если при расчёте необходимо вывести значения системы в файл для дальнейшего построения графика. По умолчанию равно false;<br/>
+*plotStep* – шаг печати, по умолчанию равен (1.0 / 2h);<br/> 
+*filename* – имя файла, в который будет выводиться значения системы во время расчётов. По умолчанию "function.dat".<br/>
+
+**void printPlot(std::string filename)** – выведет в файл с именем filename состояние системы на текущий момент.
+
+
+#### Методы класса *multSerCoef*
+
+В отличие от класса equation, экземпляров класса multSerCoef можно создать неограниченное количество.
+
+**int order()** – возвращает порядок ряда.
+
+**int realVariable()** – возвращает количество переменных системы.
+
+**int variableEven()** – возвращает количество переменных, нужных для построения таблицы коэффициентов. По факту это сумма числа переменных и параметров системы ОДУ, доведённых до чётного числа.
+
+**int realParameter()** - возвращает количество параметров системы.
+
+**int serieSize()** – возвращает количество членов, составляющих ряд.
+
+**void printTableC()** и **void printTableD()** – выведет в консоль таблицы коэффициентов (см. соответствующую статью)

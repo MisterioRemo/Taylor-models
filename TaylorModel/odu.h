@@ -32,6 +32,7 @@ private:
 	void searchPoints(vector<char>, int, int);
 	vector<T> statesToStatesT(vector<char>);
 	void printPoints(vector<char>, int);
+	void printPlot();
 
 
 public:
@@ -39,11 +40,10 @@ public:
 
 	vector<mfunction> pFun = { &equation<T>::pFun1, &equation<T>::pFun2 };
 
-	equation(int nvar, int param, int order, std::string filename = "function.dat") {
+	equation(int nvar, int param, int order) {
 		coef = new multSerCoef(nvar, param, order);		
 		sizeVar = coef->realVariable();
 		sizeParam = coef->realParameter();
-		fout.open(filename);
 
 		for (int i = 0; i < sizeVar + sizeParam; i++)
 			u.push_back(powerSeries<T>(coef->serieSize(), coef));
@@ -55,10 +55,12 @@ public:
 	};
 
 
-	void initialFlow(vector<interval<T> >*);
-	void RungeKutta(double, double, double, bool = false, int = 0);
-	void printPlot();
+	inline vector<powerSeries<T> > getODU() const;
+	inline powerSeries<T> getODU(int i) const;
 
+	void initialFlow(vector<interval<T> >*);
+	void RungeKutta(double, double, double, bool = false, int = 0, std::string = "function.dat");
+	void printPlot(std::string);
 };
 
 // для задания симметричного начального интервала на [-1; 1]
@@ -102,6 +104,17 @@ void equation<T>::initialFlow(vector<interval<T> > *points) {
 	}
 }
 
+template <typename T> 
+inline vector<powerSeries<T> > equation<T>::getODU() const {
+	return u;
+}
+
+template <typename T> 
+inline powerSeries<T> equation<T>::getODU(int i) const {
+	if (u.size() > i) 
+		return u[i];
+}
+
 template <typename T>
 powerSeries<T> equation<T>::pFun1(vector<powerSeries<T> > &v) {
 	return v[1];
@@ -113,11 +126,17 @@ powerSeries<T> equation<T>::pFun2(vector<powerSeries<T> > &v) {
 }
 
 template <typename T>
-void equation<T>::RungeKutta(double tStart, double tEnd, double h, bool plot = false, int plotStep = 0) {
+void equation<T>::RungeKutta(double tStart, double tEnd, double h, bool plot = false, int plotStep = 0, std::string filename = "function.dat") {
 	vector<powerSeries<T> > K1(sizeVar), K2(sizeVar), K3(sizeVar), K4(sizeVar), v(sizeVar);
 	int j, i, k = 0,
 		r = 1.0 / h / 2;
-	if (plotStep > 0) r = plotStep;
+	if (plot) {
+		fout.close();
+		fout.open(filename);
+		if (plotStep > 0) 
+			r = plotStep;
+	}
+	
 
 	while (tStart < tEnd + EPS) {
 		if (plot && k % r == 0) {
@@ -150,6 +169,8 @@ void equation<T>::RungeKutta(double tStart, double tEnd, double h, bool plot = f
 
 		tStart += h;
 	}
+
+	if (fout) fout.close();
 	return;
 }
 
@@ -159,6 +180,13 @@ void equation<T>::RungeKutta(double tStart, double tEnd, double h, bool plot = f
 template <typename T> 
 inline char equation<T>::nextState(char c) {
 	return (c < 1) ? c + 1 : c;
+}
+
+template <typename T>
+void equation<T>::printPlot(std::string filename) {
+	fout.open(filename);
+	printPlot();
+	fout.close();
 }
 
 template <typename T>
